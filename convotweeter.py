@@ -50,14 +50,29 @@ while NotFound():
 def ComposeTweet():
     # Speakers Name
     speaker_name = curr_speaker.a.string
-
+    print speaker_name
 
     # Speakers Website
     speaker_site = curr_speaker.a.get('href')
+    print speaker_site
+
+    # Topical Week
+    if curr_speaker.find('em') == None:
+        topic = ""
+    else:
+        topic = curr_speaker.em.extract()
+    print topic
 
     # Description of the Speaker
-    speaker_desc = re.search("[||].*[^<//p>]", str(curr_speaker)).group(0)
+    speaker_desc = re.search("[||].*", str(curr_speaker)).group(0)
+    print speaker_desc
     speaker_desc = speaker_desc.replace("|", "").lstrip()
+    result = re.search('<.*>',str(speaker_desc)).group(0)
+    print "Result: " + result
+    speaker_desc = speaker_desc.replace(result, "")
+    print speaker_desc
+
+
 
     # Composed Tweet
     composed_tweet = todays_date + "\n" + speaker_name + "\n" + speaker_desc + "\n" + speaker_site
