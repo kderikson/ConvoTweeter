@@ -21,6 +21,7 @@ print today
 
 # Todays Date
 todays_date = str(today)
+todays_date = "9/17"
 
 # Grab the HTML content
 html = data.text
@@ -28,14 +29,16 @@ soup = BeautifulSoup(html)
 
 # Get the first speaker
 curr_speaker = soup.h1.next_sibling.next_sibling
+print curr_speaker
 
 def NotFound():
-    speaker_date = re.search('[0-9][//].*[0-9]', str(curr_speaker)).group(0)
-    print speaker_date
+    speaker_date = re.search('[0-9]+/[0-9]+', str(curr_speaker)).group(0)
+    print "Speaker date " + speaker_date
+    print "Today's date " + todays_date
     if (speaker_date == todays_date):
         return False
     else:
-        print "Speaker date not matched"
+        # print "Speaker date not matched"
         return True
 
 
@@ -43,13 +46,11 @@ while NotFound():
     # Go to the next speaker in the list
     temp = curr_speaker.next_sibling
     curr_speaker = temp.next_sibling
-    if count == 5:
-        todays_date = "9/17"
-    count = count + 1
 
 def ComposeTweet():
     # Speakers Name
     speaker_name = curr_speaker.a.string
+
 
     # Speakers Website
     speaker_site = curr_speaker.a.get('href')
@@ -59,7 +60,7 @@ def ComposeTweet():
     speaker_desc = speaker_desc.replace("|", "").lstrip()
 
     # Composed Tweet
-    composed_tweet = todays_date + "\n" + speaker_name + "\n" + speaker_desc +          "\n" + speaker_site
+    composed_tweet = todays_date + "\n" + speaker_name + "\n" + speaker_desc + "\n" + speaker_site
 
     return composed_tweet
 
